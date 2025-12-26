@@ -1,6 +1,11 @@
 
 /** ADD YOUR AWESOME CODES HERE **/
 
+/* Use native smooth anchor scroll without JS wheel interception */
+html {
+	scroll-behavior: smooth;
+}
+
 /* Mapea la clase solicitada de Font Awesome 6 a la fuente incluida (FA 4.7) */
 .fa-solid {
 	display: inline-block;
