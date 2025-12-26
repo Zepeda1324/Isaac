@@ -1,737 +1,664 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en"><!-- Basic -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juegos Móviles</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+    <title>Laboratorio de Electrofisiología Vegetal - Universidad de la Ciénega</title>  
+    <meta name="keywords" content="electrofisiología vegetal, biocontrol, plagas agrícolas, Universidad de la Ciénega, Michoacán">
+    <meta name="description" content="Laboratorio de Electrofisiología Vegetal y Biocontrol de Plagas Agrícolas - Universidad de la Ciénega del Estado de Michoacán de Ocampo">
+    <meta name="author" content="Alberto Isaac Zepeda Jazo">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px 10px;
-        }
+	<!-- Site Icons -->
+	<link rel="shortcut icon" href="images/favicon.png" type="image/png">
+	<link rel="apple-touch-icon" href="images/apple-icon.png">
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Pogo Slider CSS -->
+    <link rel="stylesheet" href="css/pogo-slider.min.css">
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="css/style.css">    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
 
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .subtitle {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .game-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .game-card:active {
-            transform: scale(0.98);
-        }
-
-        .game-card:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        .game-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .game-description {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-
-        .play-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .play-button:active {
-            transform: scale(0.95);
-        }
-
-        .game-area {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            display: none;
-        }
-
-        .game-area.active {
-            display: block;
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .back-button {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .score {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        canvas {
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            width: 100%;
-            touch-action: none;
-        }
-
-        .game-controls {
-            margin-top: 15px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .control-button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.5em;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .control-button:active {
-            background: #5568d3;
-        }
-
-        .ttt-board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .ttt-cell {
-            aspect-ratio: 1;
-            background: #f0f0f0;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 2em;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ttt-cell:active {
-            background: #e0e0e0;
-        }
-
-        .reset-button {
-            background: #51cf66;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .memory-card {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            font-size: 2em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: transparent;
-            transition: transform 0.3s;
-        }
-
-        .memory-card.flipped {
-            background: white;
-            border: 2px solid #667eea;
-            color: #333;
-        }
-
-        .memory-card.matched {
-            background: #51cf66;
-            color: white;
-            cursor: default;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🎮 Juegos Móviles</h1>
-            <p class="subtitle">Selecciona un juego para comenzar</p>
-        </header>
+<body id="home" data-spy="scroll" data-target="#navbar-wd" data-offset="98">
 
-        <div class="games-grid" id="gamesList">
-            <div class="game-card" onclick="showGame('snake')">
-                <div class="game-title">🐍 Snake</div>
-                <div class="game-description">Clásico juego de la serpiente. ¡Come y crece!</div>
-                <button class="play-button">Jugar</button>
+	<!-- LOADER -->
+     <!-- <div id="preloader">
+		<div class="loader">
+			<img src="images/preloader.gif" alt="" />
+		</div>
+    </div>end loader -->
+    <!-- END LOADER -->
+	
+	<!-- Start header -->
+	<header class="top-header">
+		<nav class="navbar header-nav navbar-expand-lg">
+            <div class="container">
+				<a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="image"></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-wd" aria-controls="navbar-wd" aria-expanded="false" aria-label="Toggle navigation">
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbar-wd">
+                    <ul class="navbar-nav">
+                        <li><a class="nav-link active" href="#home">Inicio</a></li>
+                        <li><a class="nav-link" href="#about">Nosotros</a></li>
+                        <li><a class="nav-link" href="#services">Líneas de Investigación</a></li>
+                        <li><a class="nav-link" href="#gallery">Galería</a></li>
+						<li><a class="nav-link" href="#team">Equipo</a></li>
+                        <li><a class="nav-link" href="#blog">Publicaciones</a></li>
+						<li><a class="nav-link" href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+	</header>
+	<!-- End header -->
+	
+	<!-- Start Banner -->
+	<div class="ulockd-home-slider">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="pogoSlider" id="js-main-slider">
+					<div class="pogoSlider-slide" data-transition="fade" data-duration="1500" style="background-image:url(images/slider-01.jpeg);">
+						<div class="lbox-caption pogoSlider-slide-element">
+							<div class="lbox-details">
+								<h1>Laboratorio de Electrofisiología Vegetal</h1>
+								<p>Investigación en respuestas bioeléctricas de plantas y biocontrol de plagas agrícolas</p>
+								<a href="#contact" class="btn">Contacto</a>
+							</div>
+						</div>
+					</div>
+					<div class="pogoSlider-slide" data-transition="fade" data-duration="1500" style="background-image:url(images/slider-02.jpg);">
+						<div class="lbox-caption pogoSlider-slide-element">
+							<div class="lbox-details">
+								<h1>Innovación en Control Biológico</h1>
+								<p>Desarrollo de tecnologías sostenibles para la agricultura</p>
+								<a href="#services" class="btn">Investigación</a>
+							</div>
+						</div>
+					</div>
+					<div class="pogoSlider-slide" data-transition="fade" data-duration="1500" style="background-image:url(images/slider-03.jpg);">
+						<div class="lbox-caption pogoSlider-slide-element">
+							<div class="lbox-details">
+								<h1>Universidad de la Ciénega</h1>
+								<p>Contribuyendo al desarrollo científico de Michoacán</p>
+								<a href="https://ucemich.edu.mx/" class="btn">Conoce Más</a>
+							</div>
+						</div>
+						
+					</div>
+				</div><!-- .pogoSlider -->
+			</div>
+		</div>
+	</div>
+	<!-- End Banner -->
+	
+	<!-- Start About us -->
+	<div id="about" class="about-box">
+		<div class="about-a1">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="title-box">
+						<h2>Acerca del Laboratorio</h2>
+						<p>Investigación y desarrollo en electrofisiología vegetal</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="row align-items-center about-main-info">
+							<div class="col-lg-6 col-md-6 col-sm-12">
+								<h2>Laboratorio de Electrofisiología Vegetal y Biocontrol</h2>
+								<p>Nuestro laboratorio se dedica al estudio de las respuestas bioeléctricas de las plantas y su aplicación en el desarrollo de tecnologías sustentables para el control biológico de plagas agrícolas. Trabajamos en la intersección de la fisiología vegetal, la biotecnología y el manejo integrado de plagas.</p>
+								<p>Como parte de la Universidad de la Ciénega del Estado de Michoacán de Ocampo, contribuimos a la formación de recursos humanos especializados y al desarrollo de investigación científica de vanguardia que beneficia al sector agrícola de la región y del país.</p>
+								<a href="#team" class="new-btn-d br-2">Conoce al Equipo</a>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12">
+								<div class="about-m">
+									<ul id="banner">
+										<li>
+											<img src="images/about-img-01.jpg" alt="">
+										</li>
+										<li>
+											<img src="images/about-img-02.jpg" alt="">
+										</li>
+										<li>
+											<img src="images/about-img-03.jpg" alt="">
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End About us -->
+	
+	<!-- Start Services -->
+	<div id="services" class="services-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Líneas de Investigación</h2>
+						<p>Áreas de estudio y desarrollo del laboratorio</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="owl-carousel owl-theme">
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-leaf" aria-hidden="true"></i></div>
+								<h3 class="title">Electrofisiología Vegetal</h3>
+								<p class="description">
+									Estudio de señales bioeléctricas en plantas y su respuesta a diversos estímulos ambientales.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-bug" aria-hidden="true"></i></div>
+								<h3 class="title">Biocontrol de Plagas</h3>
+								<p class="description">
+									Desarrollo de estrategias biológicas para el control sostenible de plagas agrícolas.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-flask" aria-hidden="true"></i></div>
+								<h3 class="title">Fisiología de Cultivos</h3>
+								<p class="description">
+									Análisis de respuestas fisiológicas de cultivos a condiciones de estrés biótico y abiótico.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-line-chart" aria-hidden="true"></i></div>
+								<h3 class="title">Biotecnología Agrícola</h3>
+								<p class="description">
+									Aplicación de herramientas biotecnológicas para mejorar la productividad agrícola.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-recycle" aria-hidden="true"></i></div>
+								<h3 class="title">Agricultura Sostenible</h3>
+								<p class="description">
+									Investigación en prácticas agrícolas sustentables y amigables con el medio ambiente.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="serviceBox">
+								<div class="service-icon"><i class="fa fa-pagelines" aria-hidden="true"></i></div>
+								<h3 class="title">Interacción Planta-Insecto</h3>
+								<p class="description">
+									Estudio de las interacciones entre plantas y organismos.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</div>
+	</div>
+	<!-- End Services -->
+	
+	<!-- Start Facilities -->
+	<div id="facilities" class="appointment-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Instalaciones y Equipamiento</h2>
+						<p>Infraestructura especializada para la investigación</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<div class="well-block">
+                        <div class="well-title">
+                            <h2>Equipamiento Especializado</h2>
+                        </div>
+                        <div class="feature-block">
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Electrodos de Medición</h4>
+                                <div class="feature-content">
+                                    <p>Equipos de última generación para el registro de potenciales eléctricos en tejidos vegetales.</p>
+                                </div>
+                            </div>
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Microscopio Especializado</h4>
+                                <div class="feature-content">
+                                    <p>Tecnología avanzada para el análisis morfológico y estructural de plantas e insectos.</p>
+                                </div>
+                            </div>
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Cámaras de Cultivo Controladas</h4>
+                                <div class="feature-content">
+                                    <p>Ambientes controlados para experimentación bajo condiciones específicas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<div class="well-block">
+                        <div class="well-title">
+                            <h2>Capacidades del Laboratorio</h2>
+                        </div>
+                        <div class="feature-block">
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Análisis Fisiológico</h4>
+                                <div class="feature-content">
+                                    <p>Medición y análisis de respuestas fisiológicas de plantas a diversos estímulos.</p>
+                                </div>
+                            </div>
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Bioensayos de Control</h4>
+                                <div class="feature-content">
+                                    <p>Evaluación de la eficacia de agentes de biocontrol sobre plagas agrícolas.</p>
+                                </div>
+                            </div>
+                            <div class="feature feature-blurb-text">
+                                <h4 class="feature-title">Investigación Aplicada</h4>
+                                <div class="feature-content">
+                                    <p>Desarrollo de tecnologías y soluciones prácticas para la agricultura sostenible.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Facilities -->
+	<div id="gallery" class="gallery-box">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Galería</h2>
+						<p>Imágenes de nuestras instalaciones y trabajo de investigación</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="popup-gallery row clearfix">
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-01.jpg" alt="">
+						<div class="box-content">	
+							<h3 class="title">Equipamiento de laboratorio</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-01.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-02.jpg" alt="">
+						<div class="box-content">
+							<h3 class="title">Experimentación</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-02.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">					
+					<div class="box-gallery">
+						<img src="images/gallery-03.jpg" alt="">
+						<div class="box-content">							
+							<h3 class="title">Análisis de cultivos</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-03.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-04.jpg" alt="">
+						<div class="box-content">	
+							<h3 class="title">Instalaciones</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-04.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-05.jpg" alt="">
+						<div class="box-content">							
+							<h3 class="title">Trabajo de campo</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-05.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">					
+					<div class="box-gallery">
+						<img src="images/gallery-06.jpg" alt="">
+						<div class="box-content">
+							<h3 class="title">Biocontrol</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-06.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-07.jpg" alt="">
+						<div class="box-content">
+							<h3 class="title">Microscopio</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-07.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="box-gallery">
+						<img src="images/gallery-08.jpg" alt="">
+						<div class="box-content">		
+							<h3 class="title">Equipo de investigación</h3>
+							<ul class="icon">
+								<li><a href="images/gallery-08.jpg"><i class="fa fa-picture-o" aria-hidden="true"></i></a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Gallery -->
+	
+	<!-- Start Team -->
+	<div id="team" class="team-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Nuestro Equipo</h2>
+						<p>Investigadores comprometidos con la ciencia y la agricultura sostenible</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="our-team">
+                        <div class="pic">
+                            <img src="images/img-1.jpg" alt="">
+                        </div>
+                        <div class="team-content">
+                            <h3 class="title">Investigador Asociado</h3>
+                            <span class="post">Electrofisiología Vegetal</span>
+                            <ul class="social">
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa-brands fa-google-scholar" aria-hidden="true"></i></a></li>-
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="game-card" onclick="showGame('tictactoe')">
-                <div class="game-title">❌⭕ Tres en Raya</div>
-                <div class="game-description">Juega contra la IA en este clásico juego</div>
-                <button class="play-button">Jugar</button>
+                <div class="col-md-4 col-sm-6">
+                    <div class="our-team">
+                        <div class="pic">
+                            <img src="images/img-2.jpg" alt="">
+                        </div>
+                        <div class="team-content">
+                            <h3 class="title">Alberto Isaac Zepeda Jazo</h3>
+                            <span class="post">Responsable del Laboratorio</span>
+                            <ul class="social">
+                                <li><a href="https://www.facebook.com/IsaacZepedaJazo"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li><a href="https://ucemich.edu.mx/directorio-ucemich/alberto-isaac-zepeda-jazo/"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></a></li>
+								<li><a href="https://scholar.google.com/citations?user=Nkjk3k0AAAAJ&hl=es"><i class="fa-brands fa-google-scholar" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="our-team">
+                        <div class="pic">
+                            <img src="images/img-1.jpg" alt="">
+                        </div>
+                        <div class="team-content">
+                            <h3 class="title">Investigador Asociado</h3>
+                            <span class="post">Biocontrol de Plagas</span>
+                            <ul class="social">
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa-brands fa-google-scholar" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+			
+		</div>
+	</div>
+	
+	<!-- End Team -->
+	
+	<!-- Start Blog -->
+	<div id="blog" class="blog-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Publicaciones y Noticias</h2>
+						<p>Últimas investigaciones y avances del laboratorio</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="blog-inner">
+						<div class="blog-img">
+							<img class="img-fluid" src="images/blog-img-01.png" alt="" />
+						</div>
+						<div class="item-meta">
+							<a ><span><i class="dti"></i> 26 Octubre 2007</span></a>
+						</div>
+					    <h2>Regulación Iónica en Cebada bajo Estrés Salino</h2>
+					    <p>Estudio sobre cómo las raíces de cebada regulan el equilibrio entre potasio (K⁺) y sodio (Na⁺) mediante transportadores de membrana plasmática, manteniendo la homeostasis celular y desarrollando tolerancia a la salinidad.</p>
+						<a class="new-btn-d br-2" href="https://scholar.google.com/citations?view_op=view_citation&hl=es&user=Nkjk3k0AAAAJ&citation_for_view=Nkjk3k0AAAAJ:u5HHmVD_uO8C">Leer Más <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="blog-inner">
+						<div class="blog-img">
+							<img class="img-fluid" src="images/blog-img-03.png" alt="" />
+						</div>
+						<div class="item-meta">
+							<a ><span><i class="dti"></i> 06 Octubre 2011</span></a>
+						</div>
+				    	<h2>Poliaminas y ROS en Transporte Iónico de Raíces</h2>
+				    	<p>Investigación sobre cómo poliaminas (espermine, spermidina y putrescina) interactúan con radicales hidroxilo (·OH) para activar el transporte de calcio (Ca²⁺) y potasio (K⁺) a través de la membrana plasmática de la epidermis radicular, modulando respuestas celulares y señalización al estrés.</p>
+						<a class="new-btn-d br-2" href="https://scholar.google.com/citations?view_op=view_citation&hl=es&user=Nkjk3k0AAAAJ&citation_for_view=Nkjk3k0AAAAJ:d1gkVwhDpl0C">Leer Más <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="blog-inner">
+						<div class="blog-img">
+							<img class="img-fluid" src="images/blog-img-02.png" alt="" />
+						</div>
+						<div class="item-meta">
+							<a ><span><i class="dti"></i> 24 Enero 2014</span></a>
+						</div>
+					    <h2>Regulación de ROS y Poliaminas en Estrés Salino</h2>
+				    	<p>Estudio sobre la interacción entre especies reactivas de oxígeno (ROS) y poliaminas (PAs) en la regulación del transporte iónico de la membrana plasmática. Estas moléculas son clave para la adaptación vegetal a estrés salino, sequía, heridas y patógenos, controlando canales de calcio y el transporte de potasio y sodio.</p>
+						<a class="new-btn-d br-2" href="https://scholar.google.com/citations?view_op=view_citation&hl=es&user=Nkjk3k0AAAAJ&citation_for_view=Nkjk3k0AAAAJ:Y0pCki6q_DkC">Leer Más <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Blog -->
+	
+	<!-- Start Contact -->
+	<div id="contact" class="contact-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="title-box">
+						<h2>Contacto</h2>
+						<p>Contáctanos para más información sobre el laboratorio</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				
+				<div class="col-lg-12 col-xs-12">
+				  <div class="contact-block">
+					<form id="contactForm">
+					  <div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="text" class="form-control" id="name" name="name" placeholder="Tu nombre" required data-error="Please enter your name">
+								<div class="help-block with-errors"></div>
+							</div>                                 
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="email" placeholder="Tu correo" id="email" class="form-control" name="email" required data-error="Please enter your email">
+								<div class="help-block with-errors"></div>
+							</div> 
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="tel" placeholder="Tu numero (ej. +52 123 456 7891)" id="number" class="form-control" name="phone" required pattern="^\+?(?:\d(?:\s*\d)*)+$" data-error="Solo dígitos y espacios; '+' inicial opcional">
+								<div class="help-block with-errors"></div>
+							</div> 
+						</div>
+						<div class="col-md-12">
+							<div class="form-group"> 
+								<textarea class="form-control" id="message" name="message" placeholder="Tu mensaje" rows="8" data-error="Write your message" required></textarea>
+								<div class="help-block with-errors"></div>
+							</div>
+							<div class="submit-button text-center">
+								<button class="btn btn-common" id="submit" type="submit">Enviar mensaje</button>
+								<div id="msgSubmit" class="h3 text-center hidden"></div> 
+								<div class="clearfix"></div> 
+							</div>
+						</div>
+					  </div>            
+					</form>
+				  </div>
+				</div>
+				
+				
+				<div class="col-lg-12 col-xs-12">
+					<div class="left-contact">
+						<h2>Ubicación</h2>
+						<div class="media cont-line">
+							<div class="media-left icon-b">
+								<a href="https://maps.google.com/?q=Universidad+de+la+Ciénega+Sahuayo+Michoacán+Avenida+Universidad+3000" target="_blank" title="Ver en Google Maps">
+									<i class="fa fa-location-arrow" aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="media-body dit-right">
+								<h4>Dirección</h4>
+								<p><<---   Ver mapa</p>
+								<p>Edificio A, segundo piso</p>
+							</div>
+						</div>
+						<div class="media cont-line">
+							<div class="media-left icon-b">
+								<a href="mailto:aizepeda@ucemich.edu.mx" title="Enviar correo">
+									<i class="fa fa-envelope" aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="media-body dit-right">
+								<h4>Email</h4>
+								<p><<---   Enviar correo</p>
+							</div>
+						</div>
+						<div class="media cont-line">
+							<div class="media-left icon-b">
+								<a href="tel:+523535320762" title="Llamar">
+									<i class="fa fa-volume-control-phone" aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="media-body dit-right">
+								<h4>Teléfono</h4>
+								<p><<---   Llamar - Ext. 1642</p>
+								<p>Laboratorio de Electrofisiología Vegetal</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+	<!-- End Contact -->
+	
+	<!-- Start Footer -->
+	<footer class="footer-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<p class="footer-company-name">Todos los Derechos Reservados. &copy; 2025 <a href="#">Laboratorio de Electrofisiología Vegetal y Biocontrol de Plagas Agrícolas</a> | Universidad de la Ciénega del Estado de Michoacán de Ocampo</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer -->
+	
+	<a href="#" id="scroll-to-top" class="new-btn-d br-2"><i class="fa fa-angle-up"></i></a>
 
-            <div class="game-card" onclick="showGame('memory')">
-                <div class="game-title">🧠 Memoria</div>
-                <div class="game-description">Encuentra todas las parejas de emojis</div>
-                <button class="play-button">Jugar</button>
-            </div>
-
-            <div class="game-card" onclick="showGame('pong')">
-                <div class="game-title">🏓 Pong</div>
-                <div class="game-description">Clásico juego de ping-pong</div>
-                <button class="play-button">Jugar</button>
-            </div>
-
-            <div class="game-card" onclick="showGame('flappy')">
-                <div class="game-title">🐦 Flappy Bird</div>
-                <div class="game-description">Toca para volar y evita los obstáculos</div>
-                <button class="play-button">Jugar</button>
-            </div>
-        </div>
-
-        <!-- Snake Game -->
-        <div class="game-area" id="snakeGame">
-            <div class="game-header">
-                <button class="back-button" onclick="backToMenu()">← Volver</button>
-                <div class="score">Puntos: <span id="snakeScore">0</span></div>
-            </div>
-            <canvas id="snakeCanvas" width="300" height="300"></canvas>
-            <div class="game-controls">
-                <div></div>
-                <button class="control-button" onclick="changeDirection('UP')">↑</button>
-                <div></div>
-                <button class="control-button" onclick="changeDirection('LEFT')">←</button>
-                <button class="reset-button" onclick="resetSnake()">Reiniciar</button>
-                <button class="control-button" onclick="changeDirection('RIGHT')">→</button>
-                <div></div>
-                <button class="control-button" onclick="changeDirection('DOWN')">↓</button>
-                <div></div>
-            </div>
-        </div>
-
-        <!-- Tic Tac Toe Game -->
-        <div class="game-area" id="tictactoeGame">
-            <div class="game-header">
-                <button class="back-button" onclick="backToMenu()">← Volver</button>
-                <div class="score" id="tttStatus">Tu turno</div>
-            </div>
-            <div class="ttt-board" id="tttBoard"></div>
-            <button class="reset-button" onclick="resetTicTacToe()">Nueva Partida</button>
-        </div>
-
-        <!-- Memory Game -->
-        <div class="game-area" id="memoryGame">
-            <div class="game-header">
-                <button class="back-button" onclick="backToMenu()">← Volver</button>
-                <div class="score">Movimientos: <span id="memoryMoves">0</span></div>
-            </div>
-            <div class="memory-grid" id="memoryGrid"></div>
-            <button class="reset-button" onclick="resetMemory()">Reiniciar</button>
-        </div>
-
-        <!-- Pong Game -->
-        <div class="game-area" id="pongGame">
-            <div class="game-header">
-                <button class="back-button" onclick="backToMenu()">← Volver</button>
-                <div class="score">Puntos: <span id="pongScore">0</span></div>
-            </div>
-            <canvas id="pongCanvas" width="300" height="400"></canvas>
-        </div>
-
-        <!-- Flappy Bird Game -->
-        <div class="game-area" id="flappyGame">
-            <div class="game-header">
-                <button class="back-button" onclick="backToMenu()">← Volver</button>
-                <div class="score">Puntos: <span id="flappyScore">0</span></div>
-            </div>
-            <canvas id="flappyCanvas" width="300" height="400"></canvas>
-            <button class="reset-button" onclick="resetFlappy()" style="margin-top: 10px;">Reiniciar</button>
-        </div>
-    </div>
-
-    <script>
-        let currentGame = null;
-
-        function showGame(game) {
-            document.getElementById('gamesList').style.display = 'none';
-            document.getElementById(game + 'Game').classList.add('active');
-            currentGame = game;
-
-            if (game === 'snake') startSnake();
-            else if (game === 'tictactoe') startTicTacToe();
-            else if (game === 'memory') startMemory();
-            else if (game === 'pong') startPong();
-            else if (game === 'flappy') startFlappy();
-        }
-
-        function backToMenu() {
-            document.querySelectorAll('.game-area').forEach(area => {
-                area.classList.remove('active');
-            });
-            document.getElementById('gamesList').style.display = 'grid';
-            currentGame = null;
-        }
-
-        // ========== SNAKE GAME ==========
-        let snake, direction, nextDirection, food, snakeScore, snakeInterval;
-
-        function startSnake() {
-            resetSnake();
-        }
-
-        function resetSnake() {
-            snake = [{x: 5, y: 5}];
-            direction = {x: 1, y: 0};
-            nextDirection = {x: 1, y: 0};
-            snakeScore = 0;
-            document.getElementById('snakeScore').textContent = snakeScore;
-            placeFood();
-            
-            if (snakeInterval) clearInterval(snakeInterval);
-            snakeInterval = setInterval(updateSnake, 150);
-        }
-
-        function placeFood() {
-            food = {
-                x: Math.floor(Math.random() * 15),
-                y: Math.floor(Math.random() * 15)
-            };
-        }
-
-        function changeDirection(dir) {
-            if (dir === 'UP' && direction.y === 0) nextDirection = {x: 0, y: -1};
-            else if (dir === 'DOWN' && direction.y === 0) nextDirection = {x: 0, y: 1};
-            else if (dir === 'LEFT' && direction.x === 0) nextDirection = {x: -1, y: 0};
-            else if (dir === 'RIGHT' && direction.x === 0) nextDirection = {x: 1, y: 0};
-        }
-
-        function updateSnake() {
-            direction = nextDirection;
-            const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
-
-            if (head.x < 0 || head.x >= 15 || head.y < 0 || head.y >= 15 || 
-                snake.some(s => s.x === head.x && s.y === head.y)) {
-                clearInterval(snakeInterval);
-                alert('Game Over! Puntuación: ' + snakeScore);
-                return;
-            }
-
-            snake.unshift(head);
-
-            if (head.x === food.x && head.y === food.y) {
-                snakeScore += 10;
-                document.getElementById('snakeScore').textContent = snakeScore;
-                placeFood();
-            } else {
-                snake.pop();
-            }
-
-            drawSnake();
-        }
-
-        function drawSnake() {
-            const canvas = document.getElementById('snakeCanvas');
-            const ctx = canvas.getContext('2d');
-            const cellSize = 20;
-
-            ctx.fillStyle = '#f0f0f0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#51cf66';
-            snake.forEach(segment => {
-                ctx.fillRect(segment.x * cellSize, segment.y * cellSize, cellSize - 2, cellSize - 2);
-            });
-
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize - 2, cellSize - 2);
-        }
-
-        // ========== TIC TAC TOE GAME ==========
-        let tttBoard, tttCurrentPlayer;
-
-        function startTicTacToe() {
-            resetTicTacToe();
-        }
-
-        function resetTicTacToe() {
-            tttBoard = Array(9).fill('');
-            tttCurrentPlayer = 'X';
-            document.getElementById('tttStatus').textContent = 'Tu turno';
-            
-            const boardElement = document.getElementById('tttBoard');
-            boardElement.innerHTML = '';
-            
-            for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'ttt-cell';
-                cell.onclick = () => tttMove(i);
-                boardElement.appendChild(cell);
-            }
-        }
-
-        function tttMove(index) {
-            if (tttBoard[index] !== '' || tttCurrentPlayer !== 'X') return;
-            
-            tttBoard[index] = 'X';
-            updateTTTBoard();
-            
-            if (checkTTTWinner('X')) {
-                document.getElementById('tttStatus').textContent = '¡Ganaste!';
-                return;
-            }
-            
-            if (!tttBoard.includes('')) {
-                document.getElementById('tttStatus').textContent = 'Empate';
-                return;
-            }
-            
-            tttCurrentPlayer = 'O';
-            document.getElementById('tttStatus').textContent = 'Turno IA...';
-            
-            setTimeout(() => {
-                tttAIMove();
-            }, 500);
-        }
-
-        function tttAIMove() {
-            const available = tttBoard.map((v, i) => v === '' ? i : null).filter(v => v !== null);
-            const move = available[Math.floor(Math.random() * available.length)];
-            
-            tttBoard[move] = 'O';
-            updateTTTBoard();
-            
-            if (checkTTTWinner('O')) {
-                document.getElementById('tttStatus').textContent = 'IA gana';
-                return;
-            }
-            
-            if (!tttBoard.includes('')) {
-                document.getElementById('tttStatus').textContent = 'Empate';
-                return;
-            }
-            
-            tttCurrentPlayer = 'X';
-            document.getElementById('tttStatus').textContent = 'Tu turno';
-        }
-
-        function updateTTTBoard() {
-            const cells = document.getElementById('tttBoard').children;
-            tttBoard.forEach((value, i) => {
-                cells[i].textContent = value;
-                cells[i].style.color = value === 'X' ? '#667eea' : '#ff6b6b';
-            });
-        }
-
-        function checkTTTWinner(player) {
-            const wins = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            return wins.some(combo => 
-                combo.every(i => tttBoard[i] === player)
-            );
-        }
-
-        // ========== MEMORY GAME ==========
-        let memoryCards, memoryFlipped, memoryMatched, memoryMoves;
-
-        function startMemory() {
-            resetMemory();
-        }
-
-        function resetMemory() {
-            const emojis = ['🎮', '🎯', '🎲', '🎪', '🎨', '🎭', '🎬', '🎤'];
-            memoryCards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
-            memoryFlipped = [];
-            memoryMatched = [];
-            memoryMoves = 0;
-            document.getElementById('memoryMoves').textContent = memoryMoves;
-            
-            const grid = document.getElementById('memoryGrid');
-            grid.innerHTML = '';
-            
-            memoryCards.forEach((emoji, i) => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.dataset.index = i;
-                card.textContent = emoji;
-                card.onclick = () => flipMemoryCard(i);
-                grid.appendChild(card);
-            });
-        }
-
-        function flipMemoryCard(index) {
-            if (memoryFlipped.length === 2 || memoryFlipped.includes(index) || 
-                memoryMatched.includes(index)) return;
-            
-            const cards = document.getElementById('memoryGrid').children;
-            cards[index].classList.add('flipped');
-            memoryFlipped.push(index);
-            
-            if (memoryFlipped.length === 2) {
-                memoryMoves++;
-                document.getElementById('memoryMoves').textContent = memoryMoves;
-                
-                setTimeout(() => {
-                    const [first, second] = memoryFlipped;
-                    if (memoryCards[first] === memoryCards[second]) {
-                        cards[first].classList.add('matched');
-                        cards[second].classList.add('matched');
-                        memoryMatched.push(first, second);
-                        
-                        if (memoryMatched.length === memoryCards.length) {
-                            setTimeout(() => {
-                                alert('¡Ganaste! Movimientos: ' + memoryMoves);
-                            }, 500);
-                        }
-                    } else {
-                        cards[first].classList.remove('flipped');
-                        cards[second].classList.remove('flipped');
-                    }
-                    memoryFlipped = [];
-                }, 800);
-            }
-        }
-
-        // ========== PONG GAME ==========
-        let pongPaddle, pongBall, pongScore, pongInterval;
-
-        function startPong() {
-            resetPong();
-        }
-
-        function resetPong() {
-            const canvas = document.getElementById('pongCanvas');
-            pongPaddle = {x: 125, y: 360, width: 50, height: 10};
-            pongBall = {x: 150, y: 200, dx: 3, dy: 3, radius: 5};
-            pongScore = 0;
-            document.getElementById('pongScore').textContent = pongScore;
-            
-            canvas.ontouchmove = (e) => {
-                e.preventDefault();
-                const rect = canvas.getBoundingClientRect();
-                const touch = e.touches[0];
-                pongPaddle.x = (touch.clientX - rect.left) - pongPaddle.width / 2;
-                pongPaddle.x = Math.max(0, Math.min(canvas.width - pongPaddle.width, pongPaddle.x));
-            };
-            
-            if (pongInterval) clearInterval(pongInterval);
-            pongInterval = setInterval(updatePong, 1000/60);
-        }
-
-        function updatePong() {
-            const canvas = document.getElementById('pongCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            pongBall.x += pongBall.dx;
-            pongBall.y += pongBall.dy;
-            
-            if (pongBall.x - pongBall.radius < 0 || pongBall.x + pongBall.radius > canvas.width) {
-                pongBall.dx = -pongBall.dx;
-            }
-            
-            if (pongBall.y - pongBall.radius < 0) {
-                pongBall.dy = -pongBall.dy;
-            }
-            
-            if (pongBall.y + pongBall.radius > pongPaddle.y &&
-                pongBall.x > pongPaddle.x && pongBall.x < pongPaddle.x + pongPaddle.width) {
-                pongBall.dy = -pongBall.dy;
-                pongScore += 10;
-                document.getElementById('pongScore').textContent = pongScore;
-                pongBall.dx *= 1.05;
-                pongBall.dy *= 1.05;
-            }
-            
-            if (pongBall.y - pongBall.radius > canvas.height) {
-                clearInterval(pongInterval);
-                alert('Game Over! Puntuación: ' + pongScore);
-                return;
-            }
-            
-            ctx.fillStyle = '#f0f0f0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#667eea';
-            ctx.fillRect(pongPaddle.x, pongPaddle.y, pongPaddle.width, pongPaddle.height);
-            
-            ctx.fillStyle = '#ff6b6b';
-            ctx.beginPath();
-            ctx.arc(pongBall.x, pongBall.y, pongBall.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // ========== FLAPPY BIRD GAME ==========
-        let flappyBird, flappyPipes, flappyScore, flappyInterval, flappyGameOver;
-
-        function startFlappy() {
-            resetFlappy();
-        }
-
-        function resetFlappy() {
-            const canvas = document.getElementById('flappyCanvas');
-            flappyBird = {y: 200, velocity: 0, radius: 12};
-            flappyPipes = [];
-            flappyScore = 0;
-            flappyGameOver = false;
-            document.getElementById('flappyScore').textContent = flappyScore;
-            
-            canvas.onclick = () => {
-                if (!flappyGameOver) {
-                    flappyBird.velocity = -6;
-                }
-            };
-            
-            if (flappyInterval) clearInterval(flappyInterval);
-            flappyInterval = setInterval(updateFlappy, 1000/60);
-        }
-
-        function updateFlappy() {
-            const canvas = document.getElementById('flappyCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            if (flappyGameOver) return;
-            
-            flappyBird.velocity += 0.4;
-            flappyBird.y += flappyBird.velocity;
-            
-            if (Math.random() < 0.01) {
-                const gap = 120;
-                const minY = 50;
-                const maxY = canvas.height - gap - 50;
-                const topHeight = minY + Math.random() * (maxY - minY);
-                
-                flappyPipes.push({
-                    x: canvas.width,
-                    topHeight: topHeight,
-                    bottomY: topHeight + gap,
-                    scored: false
-                });
-            }
-            
-            flappyPipes = flappyPipes.filter(pipe => {
-                pipe.x -= 2;
-                
-                if (!pipe.scored && pipe.x + 50 < 50) {
-                    flappyScore++;
-                    document.getElementById('flappyScore').textContent = flappyScore;
-                    pipe.scored = true;
-                }
-                
-                if (50 + flappyBird.radius > pipe.x && 50 - flappyBird.radius < pipe.x + 50) {
-                    if (flappyBird.y - flappyBird.radius < pipe.topHeight ||
-                        flappyBird.y + flappyBird.radius > pipe.bottomY) {
-                        flappyGameOver = true;
-                        clearInterval(flappyInterval);
-                        alert('Game Over! Puntuación: ' + flappyScore);
-                    }
-                }
-                
-                return pipe.x > -50;
-            });
-            
-            if (flappyBird.y - flappyBird.radius < 0 || 
-                flappyBird.y + flappyBird.radius > canvas.height) {
-                flappyGameOver = true;
-                clearInterval(flappyInterval);
-                alert('Game Over! Puntuación: ' + flappyScore);
-            }
-            
-            ctx.fillStyle = '#87CEEB';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#51cf66';
-            flappyPipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, 50, pipe.topHeight);
-                ctx.fillRect(pipe.x, pipe.bottomY, 50, canvas.height - pipe.bottomY);
-            });
-            
-            ctx.fillStyle = '#FFD700';
-            ctx.beginPath();
-            ctx.arc(50, flappyBird.y, flappyBird.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    </script>
+	<!-- ALL JS FILES -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <!-- ALL PLUGINS -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.pogo-slider.min.js"></script> 
+	<script src="js/slider-index.js"></script>
+	<script src="js/smoothscroll.js"></script>
+	<script src="js/TweenMax.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/form-validator.min.js"></script>
+    <script src="js/contact-form-script.js"></script>
+	<script src="js/isotope.min.js"></script>	
+	<script src="js/images-loded.min.js"></script>	
+    <script src="js/custom.js"></script>
 </body>
 </html>
