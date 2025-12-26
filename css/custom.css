@@ -1,0 +1,32 @@
+
+/** ADD YOUR AWESOME CODES HERE **/
+
+/* Mapea la clase solicitada de Font Awesome 6 a la fuente incluida (FA 4.7) */
+.fa-solid {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Usa el glifo existente de "university" (f19c) como edificio institucional */
+.fa-solid.fa-building-columns:before {
+	content: "\f19c";
+}
+
+/* Mapea la clase de marcas solicitada a la fuente incluida (FA 4.7) */
+.fa-brands {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Usa el glifo de graduation-cap (f19d) como aproximación a Google Scholar */
+.fa-brands.fa-google-scholar:before {
+	content: "\f19d";
+}
