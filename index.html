@@ -36,6 +36,16 @@
 </head>
 <body id="home" data-spy="scroll" data-target="#navbar-wd" data-offset="98">
 
+	<!-- MOBILE NOT AVAILABLE MESSAGE -->
+	<div id="mobile-not-available" style="display:none; width:100%; height:100vh; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); position:fixed; top:0; left:0; z-index:9999; justify-content:center; align-items:center; text-align:center; flex-direction:column;">
+		<div style="padding:40px; color:white;">
+			<h1 style="font-size:48px; margin-bottom:20px; font-weight:bold;">⚠️ No Disponible en Móvil</h1>
+			<p style="font-size:18px; margin-bottom:30px; line-height:1.6;">Este sitio está optimizado únicamente para navegación en computadora de escritorio.</p>
+			<p style="font-size:16px; color:#e0e0e0;">Por favor, visítanos desde una computadora para una mejor experiencia.</p>
+		</div>
+	</div>
+	<!-- END MOBILE NOT AVAILABLE MESSAGE -->
+
 	<!-- LOADER -->
      <!-- <div id="preloader">
 		<div class="loader">
@@ -659,5 +669,30 @@
 	<script src="js/isotope.min.js"></script>	
 	<script src="js/images-loded.min.js"></script>	
     <script src="js/custom.js"></script>
+
+	<!-- MOBILE DETECTION SCRIPT -->
+	<script>
+		function detectMobileDevice() {
+			const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+			const isSmallScreen = window.innerWidth <= 768;
+			
+			if (isMobile || isSmallScreen) {
+				document.getElementById('mobile-not-available').style.display = 'flex';
+				document.body.style.overflow = 'hidden';
+				return true;
+			} else {
+				document.getElementById('mobile-not-available').style.display = 'none';
+				document.body.style.overflow = 'auto';
+				return false;
+			}
+		}
+		
+		// Check on page load
+		window.addEventListener('load', detectMobileDevice);
+		
+		// Check on window resize
+		window.addEventListener('resize', detectMobileDevice);
+	</script>
+	<!-- END MOBILE DETECTION SCRIPT -->
 </body>
 </html>
