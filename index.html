@@ -65,7 +65,7 @@
 				</button>
 				
 				<!-- Continue Button -->
-				<button onclick="continueOnMobile()" style="background:#fff; color:#5f6368; border:2px solid #dadce0; padding:14px 24px; font-size:15px; font-weight:500; border-radius:8px; cursor:pointer; transition:all 0.3s; width:100%;">
+					<button onclick="dismissMobileBlock()" style="background:#fff; color:#5f6368; border:2px solid #dadce0; padding:14px 24px; font-size:15px; font-weight:500; border-radius:8px; cursor:pointer; transition:all 0.3s; width:100%;">
 					⚠️ Continuar en Móvil (No Recomendado)
 				</button>
 			</div>
@@ -722,8 +722,10 @@
 	<!-- MOBILE DETECTION SCRIPT -->
 	<script>
 		function detectMobileDevice() {
-			// Check if user already chose to continue on mobile
+			// If user chose to continue, hide overlay and allow scroll
 			if (sessionStorage.getItem('continueOnMobile') === 'true') {
+				document.getElementById('mobile-not-available').style.display = 'none';
+				document.body.style.overflow = 'auto';
 				return false;
 			}
 			
@@ -786,16 +788,13 @@
 			}, 3000);
 		}
 		
-		// Function to continue on mobile despite warning
-		function continueOnMobile() {
-			if (confirm('⚠️ ADVERTENCIA\n\nEste sitio NO está optimizado para móviles.\n\n¿Estás seguro de que deseas continuar?\n\nPuedes experimentar:\n• Diseño desalineado\n• Elementos superpuestos\n• Funciones que no funcionan correctamente\n\nRecomendamos usar una computadora para la mejor experiencia.')) {
-				// Save user's choice in session storage
-				sessionStorage.setItem('continueOnMobile', 'true');
-				
-				// Hide the warning message
-				document.getElementById('mobile-not-available').style.display = 'none';
-				document.body.style.overflow = 'auto';
-			}
+		// Continue on mobile without confirmation
+		function dismissMobileBlock() {
+			// Save user's choice in session storage
+			sessionStorage.setItem('continueOnMobile', 'true');
+			// Hide the warning message and restore scroll
+			document.getElementById('mobile-not-available').style.display = 'none';
+			document.body.style.overflow = 'auto';
 		}
 		
 		// Check on page load
